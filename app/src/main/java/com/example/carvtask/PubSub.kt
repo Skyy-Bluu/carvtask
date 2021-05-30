@@ -14,6 +14,18 @@ class PubSub {
     }
 }
 
+data class SensorData(val reading: Float, val sensorID: Int)
+
+interface Event {
+    val data: Any?
+}
+
+class ConnectedStatusEvent(override val data: String) : Event
+class NotificationEvent(override val data: String) : Event
+class TemperatureEvent(override val data: Float) : Event
+class NoDataEvent(override val data: Any? = null) : Event
+class SensorEvent(override val data: SensorData) : Event
+
 /*
 Or could use an abstract class
 abstract class Event {
@@ -26,18 +38,6 @@ class TemperatureEvent(override val data: Float) : Event()
 class NoDataEvent() : Event()
 class SensorEvent(override val data: SensorData) : Event
 */
-
-data class SensorData(val reading: Float, val sensorID: Int)
-
-interface Event {
-    val data: Any?
-}
-
-class ConnectedStatusEvent(override val data: String) : Event
-class NotificationEvent(override val data: String) : Event
-class TemperatureEvent(override val data: Float) : Event
-class NoDataEvent(override val data: Any? = null) : Event
-class SensorEvent(override val data: SensorData) : Event
 
 fun main() {
     val pubSub = PubSub()
