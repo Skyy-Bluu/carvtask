@@ -4,13 +4,13 @@ import kotlin.reflect.KClass
 
 // Could create a singleton and inject where needed using koin depending on the usecase
 class PubSub {
-    val subscribers: MutableMap<KClass<*>, (Any) -> Unit> = mutableMapOf()
-    inline fun <reified T : Any> subscribe(noinline subscriber: (T) -> Unit) {
-        subscribers[T::class] = subscriber as (Any) -> Unit
+    val subscribers: MutableMap<KClass<*>, (Event) -> Unit> = mutableMapOf()
+    inline fun <reified T : Event> subscribe(noinline subscriber: (T) -> Unit) {
+        subscribers[T::class] = subscriber as (Event) -> Unit
     }
 
-    inline fun <reified T : Any> publish(event: T) {
-        subscribers[T::class]?.invoke(event)
+    fun publish(event: Event) {
+        subscribers[event::class]?.invoke(event)
     }
 }
 
@@ -35,8 +35,8 @@ abstract class Event {
 class ConnectedStatusEvent(override val data: String) : Event()
 class NotificationEvent(override val data: String) : Event()
 class TemperatureEvent(override val data: Float) : Event()
-class NoDataEvent() : Event()
-class SensorEvent(override val data: SensorData) : Event
+class NoDataEvent : Event()
+class SensorEvent(override val data: SensorData) : Event()
 */
 
 fun main() {
